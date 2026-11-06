@@ -2,12 +2,13 @@ module.exports = {
   apps: [
     {
       name: "lwi-backend",
-      script: "gunicorn",
-      args: "--bind 127.0.0.1:5000 app:app", 
-      interpreter: "./venv/bin/python",
+      script: "venv/bin/python",
+      args: "app.py",
+      interpreter: "",
       env: {
-        NODE_ENV: "production",
-      },
-    },
-  ],
+        FLASK_ENV: "production",
+        PORT: 5000
+      }
+    }
+  ]
 };
