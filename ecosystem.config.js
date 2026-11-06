@@ -2,13 +2,12 @@ module.exports = {
   apps: [
     {
       name: "lwi-backend",
-      script: "venv/bin/python",
-      args: "app.py", // Ganti dengan file utama Flask kamu (misal: run.py atau app.py)
-      interpreter: "",
+      script: "gunicorn",
+      args: "--bind 127.0.0.1:5000 app:app", 
+      interpreter: "./venv/bin/python",
       env: {
-        FLASK_ENV: "production",
-        PORT: 5000
-      }
-    }
-  ]
+        NODE_ENV: "production",
+      },
+    },
+  ],
 };
