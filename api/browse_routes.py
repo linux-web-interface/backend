@@ -1,5 +1,6 @@
 import os
 from flask import Blueprint, jsonify, send_from_directory
+import datetime
 
 browseBp = Blueprint('brwoseBp', __name__)
 
@@ -21,10 +22,17 @@ def dir():
                 isDir = os.path.isdir(itemFullPath)
                 itemType = "dir" if isDir else "file"
 
+                itemSize = os.path.getsize(itemFullPath) if not isDir else 0
+
+                rawTime = os.path.getsize(itemFullPath)
+                itemTime = datetime.datetime.fromtimestamp(rawTime).strftime("%d-%m-%Y")
+
                 items.append({
                     "name": item,
                     "type": itemType,
                     "path": itemFullPath,
+                    "size_bytes": itemSize,
+                    "modified_at": itemTime
                 })
 
     except PermissionError:
