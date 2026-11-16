@@ -5,8 +5,7 @@ import datetime
 browseBp = Blueprint('brwoseBp', __name__)
 
 NEEDED_DIR = [
-    '/var',
-    '/etc',
+    '/',
 ]
 
 @browseBp.route('/dir')
