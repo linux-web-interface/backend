@@ -25,7 +25,7 @@ def dir():
                 itemSize = os.path.getsize(itemFullPath) if not isDir else 0
 
                 rawTime = os.path.getsize(itemFullPath)
-                itemTime = datetime.datetime.fromtimestamp(rawTime).strftime("%d-%m-%Y")
+                itemTime = datetime.datetime.fromtimestamp(rawTime).strftime("%d/%m/%Y")
 
                 items.append({
                     "name": item,
