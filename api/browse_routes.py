@@ -8,39 +8,41 @@ NEEDED_DIR = [
     '/',
 ]
 
+
 @browseBp.route('/dir')
 def dir():
     items = []
 
     try:
         for path in NEEDED_DIR:
+            with os.scandir(path) as entries:
+                for entry in entries:
+                    is_dir = entry.is_dir(follow_symlinks=False)
 
-            for item in os.listdir(path):
-                itemFullPath = os.path.join(path, item)
+                    stat = entry.stat(follow_symlinks=False)
 
-                isDir = os.path.isdir(itemFullPath)
-                itemType = "dir" if isDir else "file"
+                    item_time = datetime.datetime.fromtimestamp(
+                        stat.st_mtime
+                    ).strftime("%d/%m/%Y")
 
-                itemSize = os.path.getsize(itemFullPath) if not isDir else 0
-
-                rawTime = os.path.getmtime(itemFullPath)
-                itemTime = datetime.datetime.fromtimestamp(rawTime).strftime("%d/%m/%Y")
-
-                items.append({
-                    "name": item,
-                    "type": itemType,
-                    "path": itemFullPath,
-                    "size_bytes": itemSize,
-                    "modified_at": itemTime
-                })
+                    items.append({
+                        "name": entry.name,
+                        "type": "dir" if is_dir else "file",
+                        "path": entry.path,
+                        "size_bytes": 0 if is_dir else stat.st_size,
+                        "modified_at": item_time
+                    })
 
     except PermissionError:
-        return jsonify({"error": "Akses ditolak (Permission Denied)"}), 403
+        return jsonify({
+            "error": "Akses ditolak (Permission Denied)"
+        }), 403
 
     return jsonify({
         "total_items": len(items),
         "items": items
     })
+
 
 @browseBp.route('/browse/<dir_name>', defaults={'subpath': ''})
 @browseBp.route('/browse/<dir_name>/<path:subpath>')
