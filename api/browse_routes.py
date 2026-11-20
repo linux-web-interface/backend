@@ -45,9 +45,10 @@ def dir():
 
 
 
-@browseBp.route('/browse', methods=['GET'])
-def api_browse():
-    target_path = request.args.get('path', '/')
+@browseBp.route('/browse/', defaults={'directory': '/'}, methods=['GET'])
+@browseBp.route('/browse/<path:directory>', methods=['GET'])
+def api_browse(directory):
+    target_path = os.path.realpath('/' + directory)
 
     # Normalisasi path
     target_path = os.path.realpath(target_path)
