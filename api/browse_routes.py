@@ -4,47 +4,6 @@ import datetime
 
 browseBp = Blueprint('brwoseBp', __name__)
 
-NEEDED_DIR = [
-    '/',
-]
-
-
-@browseBp.route('/dir')
-def dir():
-    items = []
-
-    try:
-        for path in NEEDED_DIR:
-            with os.scandir(path) as entries:
-                for entry in entries:
-                    is_dir = entry.is_dir(follow_symlinks=False)
-
-                    stat = entry.stat(follow_symlinks=False)
-
-                    item_time = datetime.datetime.fromtimestamp(
-                        stat.st_mtime
-                    ).strftime("%d/%m/%Y")
-
-                    items.append({
-                        "name": entry.name,
-                        "type": "dir" if is_dir else "file",
-                        "path": entry.path,
-                        "size_bytes": 0 if is_dir else stat.st_size,
-                        "modified_at": item_time
-                    })
-
-    except PermissionError:
-        return jsonify({
-            "error": "Akses ditolak (Permission Denied)"
-        }), 403
-
-    return jsonify({
-        "total_items": len(items),
-        "items": items
-    })
-
-
-
 @browseBp.route('/browse/', defaults={'directory': '/'}, methods=['GET'])
 @browseBp.route('/browse/<path:directory>', methods=['GET'])
 def api_browse(directory):
