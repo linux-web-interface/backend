@@ -9,10 +9,10 @@ CORS(
     resources={
         r"/api/*": {
             "origins": ["http://localhost:5173", r"http://[a-zA-Z0-9-]+\.local(?::\d+)?"],
-            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization"]
         }
-    }
+    },
+    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    # allow_headers=["Content-Type", "Authorization"]
 )
 
 app.register_blueprint(browseBp, url_prefix="/api")
