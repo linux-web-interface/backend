@@ -2,6 +2,7 @@ from flask import Flask, Blueprint
 from flask_cors import CORS
 from api.browse_routes import browseBp
 from api.desktop_routes import desktopBp
+from api.editor_routes import editorBp
 
 
 app = Flask(__name__)
@@ -18,6 +19,7 @@ CORS(
 
 app.register_blueprint(browseBp, url_prefix="/api")
 app.register_blueprint(desktopBp, url_prefix="/api")
+app.register_blueprint(editorBp, url_prefix="/api")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
